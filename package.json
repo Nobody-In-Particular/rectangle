@@ -9,6 +9,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "svg_utils": "file:../svg_utils"
+    "@nobody-in-particular/svg_utils": "^0.0.1"
   }
 }
