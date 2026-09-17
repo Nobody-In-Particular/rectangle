@@ -1,4 +1,4 @@
-import { dragging, addSVGElement, editSVGElement, getSVGCoords, transformCoords, transformBbox } from "./svg_utils/index.js"
+import { dragging, addSVGElement, editSVGElement, getSVGCoords, transformCoords, transformBbox } from "../svg_utils/index.js"
 
 function setToBounds(val, bounds) {
 	if (val > bounds[1]) {
