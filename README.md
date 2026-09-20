@@ -31,9 +31,9 @@ new Rectangle(
 Adds a new SVG `rect` element to `parentElement` (`SVGElement`).
 
 `bbox` defines the initial position/size of the rectangle, and should be an object with properties `x`, `y`, `width` and `height`. The rectangle always starts "unflipped", so the corner coordinates will initially be as follows:
-| `x0` | `bbox.x`
-| `y0` | `bbox.y`
-| `x1` | `bbox.x + bbox.width`
-| `y1` | `bbox.y + bbox.height`
+| `x0` | `bbox.x` |
+| `y0` | `bbox.y` |
+| `x1` | `bbox.x + bbox.width` |
+| `y1` | `bbox.y + bbox.height` |
 
 `style` is an object of other attributes to be added to the element, e.g. `{fill: "white"}`
