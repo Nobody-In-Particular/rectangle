@@ -3,7 +3,7 @@ Utility SVG rectangle element API, geared towards user selection/dragging/resizi
 
 There are two "levels" of API. At the higher level, the API allows the user to drag and resize a rectangle and select an area.
 
-At the lower level, the API allow moving and resizing of the rectangle by reference to corners (`x0`/`y0`/`x1`/`y1`), with no requirement that `x0 <= x1` or `y0 <= y1`, thus allowing easy "flipping" of the rectangle since SVG does not support negative width/height.
+At the lower level, the API allows moving and resizing of the rectangle by reference to corners (`x0`/`y0`/`x1`/`y1`), with no requirement that `x0 <= x1` or `y0 <= y1`, thus allowing easy "flipping" of the rectangle, since SVG does not support negative width/height.
 
 ---
 
@@ -15,7 +15,7 @@ const area = await Rectangle.selectArea(
 	0, 0,
 	{fill: "none", stroke: "black", "stroke-width": 2}
 );
-area.set("x0", area.x0 - 2);
+area.set("x1", area.x1 - 2);
 ```
 
 ## Methods
@@ -28,9 +28,9 @@ new Rectangle(
 )
 ```
 
-Adds a new SVG `rect` element to `parentElement` (`SVGElement`).
+Adds a new SVG `rect` element to `parentElement` ([`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement)).
 
-`bbox` defines the initial position/size of the rectangle, and should be an object with properties `x`, `y`, `width` and `height`. The rectangle always starts "unflipped", so the corner coordinates will initially be as follows:
+`bbox` is an object with properties `x`, `y`, `width` and `height` and defines the initial position/size of the rectangle. The rectangle always starts "unflipped", so the corner coordinates will initially be as follows:
 
 |      |   |
 |---   |---|
