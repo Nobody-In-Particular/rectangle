@@ -10,46 +10,15 @@ function setToBounds(val, bounds) {
 	}
 }
 
-/**
-
-@typedef {Object} bbox
-@property {number} x
-@property {number} y
-@property {number} width
-@property {number} height
-*/
-/**
-@typedef {Array} bounds
-@property {number} 0 - the lower bound (inclusive)
-@property {number} 1 - the upper bound (inclusive)
-
-*/
-
-/**
-@class
-API for an SVG rectangle with various utilities
-*/
 
 class Rectangle {
 	#resizers = false;
 	#cornerResizers = [];	
 	#edgeResizers = [];
 
-	/**
-	@param {SVGElement} parentElement - initial value for {@link Rectangle#parentElement}
-	@param {bbox} bbox - initial bounding box for the rectangle
-	@param {Object} style - style and other attributes for the rectangle SVG element
-	@param {boolean} flipabble - initial value for {@link Rectangle#flippable}
-	@param {Object} optionalInitialValues
-	@param {bounds} [optionalInitialValues.xBounds=null] - initial value for {@link Rectangle#xBounds}
-	@param {bounds} [optionalInitialValues.yBounds=null] - initial value for {@link Rectangle#yBounds}
-	@param {boolean} [optionalInitialValues.round=null] - initial value for {@link Rectangle#round}
-	@param {DOMMatrixReadOnly} [optionalInitialValues.coordTransformMatrix=null] - initial value for {@link Rectangle#coordTransformMatrix}
-	*/
-	constructor(parentElement, bbox, style, flippable,
-		{xBounds = null, yBounds = null, round = true, coordTransformMatrix = new DOMMatrixReadOnly()} = {},
+	constructor(parentElement, bbox, style,
+		{flippable = true, xBounds = null, yBounds = null, round = true, coordTransformMatrix = new DOMMatrixReadOnly()} = {},
 	){
-		/** @member {boolean} - whether to round all corner values to the nearest integer when moving/setting */
 		this.round = round;
 		
 		if (this.round) {
@@ -64,7 +33,6 @@ class Rectangle {
 		}
 		
 		this.resetFlip();
-		/** @member {SVGElement} - the parent SVG element for the rectangle*/
 		this.parentElement = parentElement;
 		this.element = addSVGElement(drawElement, "rect", {
 			...style,
@@ -219,7 +187,6 @@ class Rectangle {
 			element,
 			{x, y, width: 0, height: 0},
 			style,
-			true,
 			options
 		);
 				
