@@ -76,10 +76,10 @@ class Rectangle {
 	
 	#updateBbox() {
 		this.bbox = {
-			x: Math.min(this.x0, this.x1),
-			y: Math.min(this.y0, this.y1),
-			width: Math.abs(this.x1 - this.x0),
-			height: Math.abs(this.y1 - this.y0)
+			x: Math.min(this.#x0, this.#x1),
+			y: Math.min(this.#y0, this.#y1),
+			width: Math.abs(this.#x1 - this.#x0),
+			height: Math.abs(this.#y1 - this.#y0)
 		}
 	}
 	
@@ -93,26 +93,26 @@ class Rectangle {
 	}
 	
 	resetFlip() {
-		this.x0 = this.bbox.x;
-		this.y0 = this.bbox.y;
-		this.x1 = this.x0 + this.bbox.width;
-		this.y1 = this.y0 + this.bbox.height;
+		this.#x0 = this.bbox.x;
+		this.#y0 = this.bbox.y;
+		this.#x1 = this.#x0 + this.bbox.width;
+		this.#y1 = this.#y0 + this.bbox.height;
 	}
 
 	set(prop, val) {
 		if (!this.flippable) {
 			switch (prop) {
 				case "x0":
-					val = Math.min(val, this.x1);
+					val = Math.min(val, this.#x1);
 					break;
 				case "x1":
-					val = Math.max(val, this.x0);
+					val = Math.max(val, this.#x0);
 					break;
 				case "y0":
-					val = Math.min(val, this.y1);
+					val = Math.min(val, this.#y1);
 					break;
 				case "y1":
-					val = Math.max(val, this.y0);
+					val = Math.max(val, this.#y0);
 					break;
 			}
 		}
@@ -136,9 +136,19 @@ class Rectangle {
 		this.draw();
 	}
 	
+	set x0 (val) { this.set("x0", val) }
+	set x1 (val) { this.set("x1", val) }
+	set y0 (val) { this.set("y0", val) }
+	set y1 (val) { this.set("y1", val) }
+	
+	get x0() { return this.#x0 }
+	get x1() { return this.#x1 }
+	get y0() { return this.#y0 }
+	get y1() { return this.#y1 }
+	
 	setPoint0AndShift(x, y) {
-		let dx = x - this.x0;
-		let dy = y - this.y0;
+		let dx = x - this.#x0;
+		let dy = y - this.#y0;
 		if (this.round) {
 			dx = Math.round(dx);
 			dy = Math.round(dy);
@@ -146,12 +156,12 @@ class Rectangle {
 		if (dx != 0 || dy != 0) {
 			this.changed = true;
 		}
-		this.x0 += dx;
-		this.x1 += dx;
-		this.y0 += dy;
-		this.y1 += dy;
-		let [xLow, xHigh] = this.x0 < this.x1 ? ["x0", "x1"] : ["x1", "x0"];
-		let [yLow, yHigh] = this.y0 < this.y1 ? ["y0", "y1"] : ["y1", "y0"];
+		this.#x0 += dx;
+		this.#x1 += dx;
+		this.#y0 += dy;
+		this.#y1 += dy;
+		let [xLow, xHigh] = this.#x0 < this.#x1 ? ["x0", "x1"] : ["x1", "x0"];
+		let [yLow, yHigh] = this.#y0 < this.#y1 ? ["y0", "y1"] : ["y1", "y0"];
 		
 		if (this.xBounds) {
 			this[xLow] = setToBounds(this[xLow], [this.xBounds[0], this.xBounds[1] - this.bbox.width]);
@@ -274,8 +284,8 @@ class Rectangle {
 		this.element.addEventListener("pointerdown", async (event) => {
 			event.stopPropagation();
 			let {x, y} = this.#transformFromScreen({x: event.x, y: event.y});
-			let xRel = x - this.x0;
-			let yRel = y - this.y0;
+			let xRel = x - this.#x0;
+			let yRel = y - this.#y0;
 			await this.#draggingProxy(
 				(x, y) => {
 					this.setPoint0AndShift(x - xRel, y - yRel);
