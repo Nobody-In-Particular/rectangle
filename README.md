@@ -10,12 +10,12 @@ At the lower level, the API allows moving and resizing of the rectangle by refer
 ## Example
 ```js
 const svgElement = document.createElement("svg");
-const area = await Rectangle.selectArea(
+const rect = await Rectangle.selectArea(
 	svgElement,
 	0, 0,
 	{fill: "none", stroke: "black", "stroke-width": 2}
 );
-area.set("x1", area.x1 - 2);
+rect.set("x1", area.x1 - 2);
 ```
 
 ## Methods
@@ -28,7 +28,7 @@ new Rectangle(
 )
 ```
 
-Adds a new SVG `rect` element to `parentElement` ([`SVGElement`](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement)).
+Adds a new SVG `rect` element as a child of `parentElement` (an `SVGElement`);
 
 `bbox` is an object with properties `x`, `y`, `width` and `height` and defines the initial position/size of the rectangle. The rectangle always starts "unflipped", so the corner coordinates will initially be as follows:
 
@@ -40,3 +40,23 @@ Adds a new SVG `rect` element to `parentElement` ([`SVGElement`](https://develop
 | `y1` | `bbox.y + bbox.height` |
 
 `style` is an object of other attributes to be added to the element, e.g. `{fill: "white"}`
+
+The configuration options `flippable`, `xBounds`, `yBounds`, `round` and `coordTransformMatrix` set the initial values for the corresponding instance properties.
+
+---
+
+### set
+```js
+rect.set(prop, val)
+```
+Sets property `prop` (one of `x0`, `y0`, `x1`, `y1`), to `val`, obeying restrictions set by the instance properties, and rounding `val` if `rect.round` is true.
+
+The usefulness of the "lower level" of the API is in the fact that the property names are *conserved*, e.g. if `x1` is set further left than `x0`, it remains `x1` rather than becoming `x0`.
+```js
+rect.x0 = 4;
+rect.x1 = 2;
+rect.x1 = 5;
+```
+will result in a rectangle spanning \[4, 5] on the x-axis. 
+
+
