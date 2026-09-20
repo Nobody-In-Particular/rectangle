@@ -28,7 +28,7 @@ new Rectangle(
 )
 ```
 
-Adds a new SVG `rect` element as a child of `parentElement` (an `SVGElement`);
+Adds a new SVG `rect` element as a child of `parentElement` (an `SVGElement`).
 
 `bbox` is an object with properties `x`, `y`, `width` and `height` and defines the initial position/size of the rectangle. The rectangle always starts "unflipped", so the corner coordinates will initially be as follows:
 
@@ -61,10 +61,6 @@ rect.set("x1", 5);
 // The rectangle now spans [4, 5]
 ```
 
-### set x0
-### set x1
-### set y0
-### set y1
-
+### set <x0, x1, y0, y1>
 Setters for the edge properties, e.g. `rect.x0 = 5` is equivalent to `rect.set("x0", 5)`.
 
