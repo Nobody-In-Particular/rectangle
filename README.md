@@ -3,7 +3,7 @@ Utility SVG rectangle element API, geared towards user selection/dragging/resizi
 
 There are two "levels" of API. At the higher level, the API allows the user to drag and resize a rectangle and select an area.
 
-At the lower level, the API allows moving and resizing of the rectangle by reference to corners (`x0`/`y0`/`x1`/`y1`), with no requirement that `x0 <= x1` or `y0 <= y1`, thus allowing easy "flipping" of the rectangle, since SVG does not support negative width/height.
+At the lower level, the API allows moving and resizing of the rectangle by reference to edges (`x0`/`y0`/`x1`/`y1`), with no requirement that `x0 <= x1` or `y0 <= y1`, thus allowing easy "flipping" of the rectangle, since SVG does not support negative width/height.
 
 ---
 
@@ -53,10 +53,18 @@ Sets property `prop` (one of `x0`, `y0`, `x1`, `y1`), to `val`, obeying restrict
 
 The usefulness of the "lower level" of the API is in the fact that the property names are *conserved*, e.g. if `x1` is set further left than `x0`, it remains `x1` rather than becoming `x0`.
 ```js
-rect.x0 = 4;
-rect.x1 = 2;
-rect.x1 = 5;
-```
-will result in a rectangle spanning \[4, 5] on the x-axis. 
+rect.set("x0", 4);
+rect.set("x1", 2);
+// The rectangle now spans [2, 4]
 
+rect.set("x1", 5);
+// The rectangle now spans [4, 5]
+```
+
+### set x0
+### set x1
+### set y0
+### set y1
+
+Setters for the edge properties, e.g. `rect.x0 = 5` is equivalent to `rect.set("x0", 5)`.
 
