@@ -10,16 +10,48 @@ function setToBounds(val, bounds) {
 	}
 }
 
+/**
+
+@typedef {Object} bbox
+@property {number} x
+@property {number} y
+@property {number} width
+@property {number} height
+*/
+/**
+@typedef {Array} bounds
+@property {number} 0 - the lower bound (inclusive)
+@property {number} 1 - the upper bound (inclusive)
+
+*/
+
+/**
+@class
+API for an SVG rectangle with various utilities
+*/
 
 class Rectangle {
 	#resizers = false;
-	#cornerResizers = [];
+	#cornerResizers = [];	
 	#edgeResizers = [];
-	
-	constructor(drawElement, bbox, style, flippable,
+
+	/**
+	@param {SVGElement} parentElement - initial value for {@link Rectangle#parentElement}
+	@param {bbox} bbox - initial bounding box for the rectangle
+	@param {Object} style - style and other attributes for the rectangle SVG element
+	@param {boolean} flipabble - initial value for {@link Rectangle#flippable}
+	@param {Object} optionalInitialValues
+	@param {bounds} [optionalInitialValues.xBounds=null] - initial value for {@link Rectangle#xBounds}
+	@param {bounds} [optionalInitialValues.yBounds=null] - initial value for {@link Rectangle#yBounds}
+	@param {boolean} [optionalInitialValues.round=null] - initial value for {@link Rectangle#round}
+	@param {DOMMatrixReadOnly} [optionalInitialValues.coordTransformMatrix=null] - initial value for {@link Rectangle#coordTransformMatrix}
+	*/
+	constructor(parentElement, bbox, style, flippable,
 		{xBounds = null, yBounds = null, round = true, coordTransformMatrix = new DOMMatrixReadOnly()} = {},
 	){
+		/** @member {boolean} - whether to round all corner values to the nearest integer when moving/setting */
 		this.round = round;
+		
 		if (this.round) {
 			this.bbox = {
 				x: Math.round(bbox.x),
@@ -32,15 +64,30 @@ class Rectangle {
 		}
 		
 		this.resetFlip();
-		this.flippable = flippable;
-		this.parentElement = drawElement;
+		/** @member {SVGElement} - the parent SVG element for the rectangle*/
+		this.parentElement = parentElement;
 		this.element = addSVGElement(drawElement, "rect", {
 			...style,
 		});
+		
+
+
+		
+		/** @member {boolean} - Can the rectangle be flipped - i.e., can the initial right edge come further left than
+		the left edge, and the initial bottom edge further up than the top edge */
+		this.flippable = flippable;
+		/** @member {bounds} - Inclusive left/right boundaries for *any* of the rectangle */
 		this.xBounds = xBounds;
+		/** @member {bounds} - Inclusive up/down boundaries for *any* of the rectangle */
 		this.yBounds = yBounds;
-		this.changed = false;
+		/** @member {DOMMatrixReadOnly} - Matrix to transform coordinates before drawing. The inverse is used to transform
+		mouse coordinates to rectangle coordinates when dragging/resizing.
+		This is *not* for transforming between screen and SVG coordinates - that is done automatically
+		anyway. This matrix should transform between some "virtual" coordinates and SVG coordinates. */
 		this.coordTransformMatrix = coordTransformMatrix;
+		
+		/** @member {boolean} - have any of the rectangle's points changed */
+		this.changed = false;
 	}
 	
 	#coordTransform({x, y}, inverse = false) {
@@ -68,6 +115,7 @@ class Rectangle {
 		}
 	}
 	
+	/** draw */
 	draw() {
 		this.#alignResizers();
 		editSVGElement(
@@ -126,6 +174,9 @@ class Rectangle {
 		if (this.round) {
 			dx = Math.round(dx);
 			dy = Math.round(dy);
+		}
+		if (dx != 0 || dy != 0) {
+			this.changed = true;
 		}
 		this.x0 += dx;
 		this.x1 += dx;
