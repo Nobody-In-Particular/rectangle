@@ -1,1 +1,3 @@
 # Rectangle
+Utility SVG rectangle element API, geared towards user selection/dragging/resizing.
+There are two "levels" of API. At the lower level, the methods `set` and `setPoint0AndShift` simply allow moving and resizing of the rectangle by reference to corners (`x0`/`y0`/`x1`/`y1`), with no requirement that `x0 <= x1` or `y0 <= y1`, thus allowing easy "flipping" of the rectangle since SVG does not support negative width/height.
