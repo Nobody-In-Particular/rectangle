@@ -12,6 +12,10 @@ function setToBounds(val, bounds) {
 
 
 class Rectangle {
+	#resizers = false;
+	#cornerResizers = [];
+	#edgeResizers = [];
+	
 	constructor(drawElement, bbox, style, flippable,
 		{xBounds = null, yBounds = null, round = true, coordTransformMatrix = new DOMMatrixReadOnly()} = {},
 	){
@@ -55,7 +59,7 @@ class Rectangle {
 		)
 	}
 	
-	updateBbox() {
+	#updateBbox() {
 		this.bbox = {
 			x: Math.min(this.x0, this.x1),
 			y: Math.min(this.y0, this.y1),
@@ -65,7 +69,7 @@ class Rectangle {
 	}
 	
 	draw() {
-		this.alignResizers();
+		this.#alignResizers();
 		editSVGElement(
 			this.element,
 			transformBbox(this.bbox, this.coordTransformMatrix)
@@ -112,7 +116,7 @@ class Rectangle {
 			this.changed = true;
 		}
 		this[prop] = val;
-		this.updateBbox();
+		this.#updateBbox();
 		this.draw();
 	}
 	
@@ -139,14 +143,15 @@ class Rectangle {
 			this[yLow] = setToBounds(this[yLow], [this.yBounds[0], this.yBounds[1] - this.bbox.height]);
 			this[yHigh] = this[yLow] + this.bbox.height;
 		}
-		this.updateBbox();
+		this.#updateBbox();
 		this.draw();
 	}
 		
 	remove() {
 		this.element.remove();
-		this.removeResizers();
+		this.#removeResizers();
 	}
+	
 	contains(x, y) {
 		return this.bbox.x <= x && x < this.bbox.x + this.bbox.width && this.bbox.y <= y && y < this.bbox.y + this.bbox.height;
 	}
@@ -214,16 +219,14 @@ class Rectangle {
 					}
 					this.set(prop, val);
 				}
-				this.alignResizers();
+				this.#alignResizers();
 				callback();
 			})
 		);
 	}
 
 	allowResize(callback, useRef) {
-		this.resizers = true;
-		this.cornerResizers = [];
-		this.edgeResizers = [];
+		this.#resizers = true;
 		
 		for (let i = 0; i < 4; ++i) {
 			let props = this.#resizerProps(i);
@@ -232,15 +235,15 @@ class Rectangle {
 			cornerResizer.onpointerdown = (event) => {
 				this.#dragResize(event, props.corner, callback);
 			};
-			this.cornerResizers.push(cornerResizer);
+			this.#cornerResizers.push(cornerResizer);
 			
 			let edgeResizer = this.#createResizer(useRef);
 			edgeResizer.onpointerdown = (event) => {
 				this.#dragResize(event, [props.edge], callback)
 			}
-			this.edgeResizers.push(edgeResizer);
+			this.#edgeResizers.push(edgeResizer);
 		}
-		this.alignResizers();
+		this.#alignResizers();
 	}
 
 	
@@ -269,12 +272,12 @@ class Rectangle {
 		this.allowDrag(callback, inside);
 	}
 	
-	alignResizers() {
-		if (this.resizers) {
+	#alignResizers() {
+		if (this.#resizers) {
 			for (let i = 0; i < 4; ++i) {
 				const props = this.#resizerProps(i);
 				
-				editSVGElement(this.cornerResizers[i], this.#coordTransform({
+				editSVGElement(this.#cornerResizers[i], this.#coordTransform({
 					x: this[props.corner[0]],
 					y: this[props.corner[1]]
 				}));
@@ -290,14 +293,14 @@ class Rectangle {
 						x: this[props.edge]
 					}
 				}
-				editSVGElement(this.edgeResizers[i], this.#coordTransform(pos));
+				editSVGElement(this.#edgeResizers[i], this.#coordTransform(pos));
 			}
 		}
 	}
 	
-	removeResizers() {
-		if (this.resizers) {
-			for (let el of this.cornerResizers.concat(this.edgeResizers)) {
+	#removeResizers() {
+		if (this.#resizers) {
+			for (let el of this.#cornerResizers.concat(this.#edgeResizers)) {
 				el.remove();
 			}
 		}
