@@ -1,7 +1,7 @@
 # Rectangle
 Utility SVG rectangle element API, geared towards user selection/dragging/resizing.
 
-There are two "levels" of API. At the higher level, the API allows the user to drag and resize a rectangle and select an area.
+There are two "levels" of API. At the higher level, the API allows the user to drag, resize and create rectangles.
 
 At the lower level, the API allows moving and resizing of the rectangle by reference to edges (`x0`/`y0`/`x1`/`y1`), with no requirement that `x0 <= x1` or `y0 <= y1`, thus allowing easy "flipping" of the rectangle, since SVG does not support negative width/height.
 
@@ -195,7 +195,7 @@ N/B: usually, it is desired to call `resetFlip()`  before setting `flippable = t
 ### round
 `boolean`
 
-When setting edge properties with `set()` or `setPoint0AndShift`, or when a user sets them after `allowResize()` or `allowDrag()` have been called or during `selectArea()`, the given value(s) will be rounded to the nearest integer if `round = true`.
+When setting edge properties with `set()` or `setPoint0AndShift()`, or when a user sets them after `allowResize()` or `allowDrag()` have been called or during `selectArea()`, the given value(s) will be rounded to the nearest integer if `round = true`.
 
 ---
 ### xBounds
@@ -230,7 +230,7 @@ Create a `Rectangle` with the corner (`x0`, `y0`) at (`x`, `y`). The other corne
 
 `parentElement`, `style` and `options` are passed to the `Rectangle`'s constructor (`options` is the object of initial values for the instance properties such as `flippable`).
 
-For example, the following script allows the user to select rectangles by clicking and dragging the mouse (using the `getSVGCoords` function of [svg_utils](https://github.com/Nobody-In-Particular/svg-utils), which is a dependency of this module):
+For example, the following script allows the user to draw rectangles by clicking and dragging the mouse (using the `getSVGCoords` function of [svg_utils](https://github.com/Nobody-In-Particular/svg-utils), which is a dependency of this module):
 
 ```js
 const svgElement = document.querySelector("svg");
