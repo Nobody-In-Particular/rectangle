@@ -30,7 +30,7 @@ new Rectangle(
 
 Adds a new SVG `rect` element as a child of `parentElement` (an `SVGElement`).
 
-`bbox` is an object with properties `x`, `y`, `width` and `height` and defines the initial position/size of the rectangle. The rectangle always starts "unflipped", so the corner coordinates will initially be as follows:
+`bbox` is an object with properties `x`, `y`, `width` and `height` and defines the initial position/size of the rectangle. The rectangle always starts "unflipped", so the edge values will initially be as follows:
 
 |      |   |
 |---   |---|
@@ -41,15 +41,15 @@ Adds a new SVG `rect` element as a child of `parentElement` (an `SVGElement`).
 
 `style` is an object of other attributes to be added to the element, e.g. `{fill: "white"}`
 
-The configuration options `flippable`, `xBounds`, `yBounds`, `round` and `coordTransformMatrix` set the initial values for the corresponding instance properties.
+The configuration options `flippable`, `xBounds`, `yBounds`, `round` and `coordTransformMatrix` set the initial values for the corresponding settable instance properties.
 
 ---
 
 ### set(prop, val)
 
-Sets edge property `prop` (one of `x0`, `y0`, `x1`, `y1`), to `val`, obeying restrictions set by the instance properties, and rounding `val` if `rect.round` is true.
+Sets edge property `prop` (one of `'x0'`, `'y0'`, `'x1'`, `'y1'`), to `val`, obeying restrictions set by the instance properties, and rounding `val` if `rect.round` is true.
 
-The usefulness of the "lower level" of the API is in the fact that the property names are *conserved*, e.g. if `x1` is set further left than `x0`, it remains `x1` rather than becoming `x0`.
+The usefulness of this "lower level" of the API is in the fact that the property names are *conserved*, e.g. if `x1` is set further left than `x0`, it remains `x1` rather than becoming `x0`.
 ```js
 rect.set("x0", 4);
 rect.set("x1", 2);
@@ -74,6 +74,7 @@ const currentX0 = rect.x0
 ```
 ---
 ### setPoint0AndShift(x, y)
+
 Moves the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obeying restrictions set by the instance properties, and rounding `x` and `y` if `rect.round` is true.
 ---
 
