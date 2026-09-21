@@ -186,28 +186,33 @@ rect.allowDrag(callback, inside)
 ### flippable
 
 `boolean`
+
 Can the rectangle be "flipped", i.e. can `x1` be set or moved by the user to be less than `x0`, and `y1` than `y0`.
 N/B: usually, it is desired to call `resetFlip()`  before setting `flippable = true`.
 
 ---
 ### round
 `boolean`
+
 When setting edge properties with `set()` or `setPoint0AndShift`, or when a user sets them after `allowResize()` or `allowDrag()` have been called, the given value(s) will be rounded to the nearest integer if `round = true`.
 
 ---
 ### xBounds
 `Array` - `[number, number]`
-Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]`.
+
+Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]` (the interval is inclusive e.g. `x0` or `x1` *can* be equal to `xBounds[0]`).
 
 ---
 ### yBounds
 `Array` - `[number, number]`
-Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]`.
+
+Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]` (the interval is inclusive e.g. `y0` or `y1` *can* be equal to `yBounds[0]`).
 
 ---
 ### coordTransformMatrix
 
 `DOMMatrixReadOnly`
+
 Allows the rectangle to exist in a "virtual" coordinate space other than the SVG coordinate space of its parent element.
 
 This property is a matrix that transforms "virtual" coordinates into SVG coordinates. It is used to transform the `Rectangle`'s properties before drawing/editing the SVG rectangle, and its inverse is used when the user is dragging/resizing, to transform the SVG coordinates of the user's mouse to "virtual" coordinates for the `Rectangle`.
