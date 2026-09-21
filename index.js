@@ -219,9 +219,9 @@ class Rectangle {
 		}
 	}
 	
-	static async selectArea(element, x, y, style, options) {
+	static async selectArea(parentElement, x, y, style, options) {
 		const rect = new Rectangle(
-			element,
+			parentElement,
 			{x, y, width: 0, height: 0},
 			style,
 			options

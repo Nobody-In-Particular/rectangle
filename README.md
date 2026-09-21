@@ -16,6 +16,7 @@ const rect = await Rectangle.selectArea(
 	{fill: "none", stroke: "black", "stroke-width": 2}
 );
 rect.set("x1", area.x1 - 2);
+rect.allowResizeAndDrag(() => { console.log(rect.bbox) }, "#handle-template");
 ```
 
 ## Constructor
@@ -194,19 +195,19 @@ N/B: usually, it is desired to call `resetFlip()`  before setting `flippable = t
 ### round
 `boolean`
 
-When setting edge properties with `set()` or `setPoint0AndShift`, or when a user sets them after `allowResize()` or `allowDrag()` have been called, the given value(s) will be rounded to the nearest integer if `round = true`.
+When setting edge properties with `set()` or `setPoint0AndShift`, or when a user sets them after `allowResize()` or `allowDrag()` have been called or during `selectArea()`, the given value(s) will be rounded to the nearest integer if `round = true`.
 
 ---
 ### xBounds
 `Array` - `[number, number]`
 
-Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]` (the interval is inclusive e.g. `x0` or `x1` *can* be equal to `xBounds[0]`).
+Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]` (the interval is inclusive, e.g. `x0` or `x1` *can* be equal to `xBounds[0]`).
 
 ---
 ### yBounds
 `Array` - `[number, number]`
 
-Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]` (the interval is inclusive e.g. `y0` or `y1` *can* be equal to `yBounds[0]`).
+Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]` (the interval is inclusive, e.g. `y0` or `y1` *can* be equal to `yBounds[0]`).
 
 ---
 ### coordTransformMatrix
@@ -215,13 +216,34 @@ Constrains the span of the y-axis that the rectangle can be moved in. No part of
 
 Allows the rectangle to exist in a "virtual" coordinate space other than the SVG coordinate space of its parent element.
 
-This property is a matrix that transforms "virtual" coordinates into SVG coordinates. It is used to transform the `Rectangle`'s properties before drawing/editing the SVG rectangle, and its inverse is used when the user is dragging/resizing, to transform the SVG coordinates of the user's mouse to "virtual" coordinates for the `Rectangle`.
+This property is a matrix that transforms "virtual" coordinates into SVG coordinates. It is used to transform the `Rectangle`'s properties before drawing/editing the SVG rectangle, and its inverse is used when the user is dragging/resizing/selecting, to transform the SVG coordinates of the user's pointer to "virtual" coordinates for the `Rectangle`.
 
-N/B: user mouse coordinates are already transformed from screen space to SVG space before any transformation by `coordTransformMatrix`.
+N/B: user pointer coordinates are already transformed from screen space to SVG space before any transformation by `coordTransformMatrix`.
 
 ---
 ## Static methods
 
 ---
-### selectArea
+### selectArea(parentElement, x, y, style, options)
+
+Create a `Rectangle` with the corner (`x0`, `y0`) at (`x`, `y`). The other corner (`x1`, `y1`) follows the users's pointer until a `pointerup` event is fired on the document.
+
+`parentElement`, `style` and `options` are passed to the `Rectangle`'s constructor (`options` is the object of initial values for the instance properties such as `flippable`).
+
+For example (using the `getSVGCoords` function of [svg_utils](https://github.com/Nobody-In-Particular/svg-utils), which is a dependency of this module):
+
+```js
+const svgElement = document.querySelector("svg");
+var selectedArea;
+
+svgElement.addEventListener("pointerdown", async function(event) {
+	const {x, y} = getSVGCoords(svgElement, event.x, event.y);
+	selectedArea = await Rectangle.selectArea(svgElement, x, y, {fill: "none", stroke: "black"}, { round: true });
+});
+
+```
+
+
+
+
 
