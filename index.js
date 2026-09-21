@@ -21,6 +21,7 @@ class Rectangle {
 	#y0;
 	#y1;
 	#parentElement;
+	#element;
 
 	constructor(parentElement, bbox, style,
 		{flippable = true, xBounds = null, yBounds = null, round = true, coordTransformMatrix = new DOMMatrixReadOnly()} = {},
