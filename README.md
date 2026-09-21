@@ -114,10 +114,12 @@ Edits the SVG rectangle's properties to match the `Rectangle`. Currently, the on
 
 Removes the SVG rectangle (and its resizing handles, if it has them) from its parent.
 
+---
 ### contains(x, y) 
 
 Returns a boolean indicating if the point (`x`, `y`) is within or on the rectangle.
 
+---
 ### asBounds()
 
 Returns an object with keys `xBounds` and `yBounds` which can be used to keep another `Rectangle` inside this one.
@@ -129,16 +131,19 @@ const bounds = {
 	yBounds: [rect.bbox.y, rect.bbox.y + rect.bbox.height]
 ```
 
+---
 ### get element
 
 The `SVGRectElement` that the `Rectangle` created/modifies.
 
+---
 ### allowDrag(callback, inside = true)
 
 Allow a user to drag the rectangle with the [pointer](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). If `inside` is true, the css attribute `pointer-events` is set to `visibleFill`, meaning that an unfilled rectangle can still be dragged by clicking inside it.
 
 `callback` is called, with no arguments, when the rectangle is moved by the user.
 
+---
 ### allowResize(callback, useRef)
 
 Allow a user to resize the rectangle with the [pointer](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). For this, resizing handles are added to each edge and corner. The handles are SVG [`use` elements](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/use), using `useRef` as their `href` attribute. For example:
@@ -162,6 +167,7 @@ rect.allowResize(() => {}, "handle-template");
 
 `callback` is called, with no arguments, when the rectangle is resized by the user.
 
+---
 ### allowResizeAndDrag(callback, useRef, inside = true)
 
 Shorthand for `allowResize` and `allowDrag` when using the same callback.
@@ -172,22 +178,31 @@ rect.allowResize(callback, useRef)
 rect.allowDrag(callback, inside)
 ```
 
+---
 ## Instance properties
 
+---
 ### flippable
 
+---
 ### round
 
+---
 ### xBounds
 
+---
 ### yBounds
 
+---
 ### coordTransformMatrix
 
+---
 ## Static methods
 
+---
 ### selectArea
 
+---
 ## License
 
 
