@@ -201,13 +201,13 @@ When setting edge properties with `set()` or `setPoint0AndShift`, or when a user
 ### xBounds
 `Array` - `[number, number]`
 
-Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]` (the interval is inclusive, e.g. `x0` or `x1` *can* be equal to `xBounds[0]`).
+Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]` (the interval is inclusive, i.e. `x0` or `x1` *can* be equal to `xBounds[0]` or `xBounds[1]`).
 
 ---
 ### yBounds
 `Array` - `[number, number]`
 
-Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]` (the interval is inclusive, e.g. `y0` or `y1` *can* be equal to `yBounds[0]`).
+Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]` (the interval is inclusive, i.e. `y0` or `y1` *can* be equal to `yBounds[0]` or `yBounds[1]`).
 
 ---
 ### coordTransformMatrix
@@ -224,13 +224,13 @@ N/B: user pointer coordinates are already transformed from screen space to SVG s
 ## Static methods
 
 ---
-### selectArea(parentElement, x, y, style, options)
+### async selectArea(parentElement, x, y, style, options)
 
 Create a `Rectangle` with the corner (`x0`, `y0`) at (`x`, `y`). The other corner (`x1`, `y1`) follows the users's pointer until a `pointerup` event is fired on the document.
 
 `parentElement`, `style` and `options` are passed to the `Rectangle`'s constructor (`options` is the object of initial values for the instance properties such as `flippable`).
 
-For example (using the `getSVGCoords` function of [svg_utils](https://github.com/Nobody-In-Particular/svg-utils), which is a dependency of this module):
+For example, the following script allows the user to select rectangles by clicking and dragging the mouse (using the `getSVGCoords` function of [svg_utils](https://github.com/Nobody-In-Particular/svg-utils), which is a dependency of this module):
 
 ```js
 const svgElement = document.querySelector("svg");
