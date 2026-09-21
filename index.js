@@ -38,8 +38,8 @@ class Rectangle {
 		}
 		
 		this.resetFlip();
-		this.parentElement = parentElement;
-		this.element = addSVGElement(parentElement, "rect", {
+		this.#parentElement = parentElement;
+		this.#element = addSVGElement(parentElement, "rect", {
 			...style,
 		});
 		
@@ -69,7 +69,7 @@ class Rectangle {
 	}
 	
 	#transformFromScreen({x, y}) {
-		return this.#coordTransform(getSVGCoords(x, y, this.parentElement), true);
+		return this.#coordTransform(getSVGCoords(x, y, this.#parentElement), true);
 	}
 		
 	#draggingProxy(func) {
@@ -91,7 +91,7 @@ class Rectangle {
 	draw() {
 		this.#alignResizers();
 		editSVGElement(
-			this.element,
+			this.#element,
 			transformBbox(this.#bbox, this.coordTransformMatrix)
 		)
 	}
@@ -167,6 +167,10 @@ class Rectangle {
 		return {...this.#bbox};
 	}
 	
+	get element() {
+		return this.#element;
+	}
+	
 	setPoint0AndShift(x, y) {
 		let dx = x - this.#x0;
 		let dy = y - this.#y0;
@@ -198,7 +202,7 @@ class Rectangle {
 	}
 		
 	remove() {
-		this.element.remove();
+		this.#element.remove();
 		this.#removeResizers();
 	}
 	
@@ -246,7 +250,7 @@ class Rectangle {
 	}
 	
 	#createResizer(ref) {
-		return addSVGElement(this.parentElement, "use", {
+		return addSVGElement(this.#parentElement, "use", {
 			"href": "#" + ref
 		})
 	}
@@ -298,11 +302,11 @@ class Rectangle {
 	
 	allowDrag(callback, inside = true) {
 		if (inside) {
-			this.element.style.pointerEvents = "visibleFill";
+			this.#element.style.pointerEvents = "visibleFill";
 		} else {
-			this.element.style.pointerEvents = "visiblePainted";
+			this.#element.style.pointerEvents = "visiblePainted";
 		}
-		this.element.addEventListener("pointerdown", async (event) => {
+		this.#element.addEventListener("pointerdown", async (event) => {
 			event.stopPropagation();
 			let {x, y} = this.#transformFromScreen({x: event.x, y: event.y});
 			let xRel = x - this.#x0;

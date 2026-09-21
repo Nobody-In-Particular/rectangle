@@ -90,7 +90,7 @@ rect.bbox // {x: 4, y: 1, width: 3, height: 4}
 
 ---
 ### resetFlip()
-Doesn't change the rectangle, but "relabels" the edges so that `x0 <= x1` and `y0 <= y1`. Equivalent to
+Doesn't change the rectangle, but "relabels" the edges so that `x0 <= x1` and `y0 <= y1`. Equivalent to the end result of:
 ```js
 const {x, y, width, height} = rect.bbox;
 rect.x0 = x
@@ -101,5 +101,12 @@ rect.y1 = y + height;
 
 ---
 ### setPoint0AndShift(x, y)
-Moves the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obeying restrictions set by the instance properties, and rounding `x` and `y` if `rect.round` is true.
+Translates the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obeying restrictions set by the instance properties, and rounding `x` and `y` if `rect.round` is true.
+
+---
+
+### draw() 
+Redraws the rectangle. The only use for this function currently is if `coordTransformMatrix` has been changed, as this function does not change the rectangle according to changes to any other constraining instance properties (e.g. `xBounds`), and changes to the edge properties automatically redraw the rectangle.
+
+
 
