@@ -91,6 +91,13 @@ rect.bbox // {x: 4, y: 1, width: 3, height: 4}
 ---
 ### resetFlip()
 Doesn't change the rectangle, but "relabels" the edges so that `x0 <= x1` and `y0 <= y1`. Equivalent to
+```js
+const {x, y, width, height} = rect.bbox;
+rect.x0 = x
+rect.x1 = x + width;
+rect.y0 = y;
+rect.y1 = y + height;
+```
 
 ---
 ### setPoint0AndShift(x, y)
