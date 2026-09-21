@@ -58,6 +58,7 @@ rect.set("x1", 2);
 rect.set("x1", 5);
 // The rectangle now spans [4, 5] on the x-axis
 ```
+
 ---
 ### set x0, set x1, set y0, set y1
 Setters for the edge properties
@@ -66,16 +67,32 @@ Setters for the edge properties
 rect.x0 = 5
 rect.set("x0", 5)
 ```
+
 ---
 ### get x0, get x1, get y0, get y1
 Getters for the edge properties.
 ```js
 const currentX0 = rect.x0
 ```
+
+---
+### get bbox
+Returns an object with properties `x`, `y`, `width` and `height`, where (`x`, `y`) is the current top-left corner of the rectangle. The returned object is a copy and mutations to it have no effect on the rectangle.
+```js
+rect.x0 = 4;
+rect.x1 = 7;
+
+rect.y0 = 5;
+rect.y1 = 1;
+
+rect.bbox // {x: 4, y: 1, width: 3, height: 4}
+```
+
+---
+### resetFlip()
+Doesn't change the rectangle, but "relabels" the edges so that `x0 <= x1` and `y0 <= y1`. Equivalent to
+
 ---
 ### setPoint0AndShift(x, y)
-
 Moves the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obeying restrictions set by the instance properties, and rounding `x` and `y` if `rect.round` is true.
----
-
 

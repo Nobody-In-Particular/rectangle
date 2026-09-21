@@ -15,6 +15,11 @@ class Rectangle {
 	#resizers = false;
 	#cornerResizers = [];	
 	#edgeResizers = [];
+	#bbox;
+	#x0;
+	#x1;
+	#y0;
+	#y1;
 
 	constructor(parentElement, bbox, style,
 		{flippable = true, xBounds = null, yBounds = null, round = true, coordTransformMatrix = new DOMMatrixReadOnly()} = {},
@@ -22,19 +27,19 @@ class Rectangle {
 		this.round = round;
 		
 		if (this.round) {
-			this.bbox = {
+			this.#bbox = {
 				x: Math.round(bbox.x),
 				y: Math.round(bbox.y),
 				width: Math.round(bbox.width),
 				height: Math.round(bbox.height)
 			}
 		} else {
-			this.bbox = {...bbox}
+			this.#bbox = {...bbox}
 		}
 		
 		this.resetFlip();
 		this.parentElement = parentElement;
-		this.element = addSVGElement(drawElement, "rect", {
+		this.element = addSVGElement(parentElement, "rect", {
 			...style,
 		});
 		
@@ -75,7 +80,7 @@ class Rectangle {
 	}
 	
 	#updateBbox() {
-		this.bbox = {
+		this.#bbox = {
 			x: Math.min(this.#x0, this.#x1),
 			y: Math.min(this.#y0, this.#y1),
 			width: Math.abs(this.#x1 - this.#x0),
@@ -83,20 +88,19 @@ class Rectangle {
 		}
 	}
 	
-	/** draw */
 	draw() {
 		this.#alignResizers();
 		editSVGElement(
 			this.element,
-			transformBbox(this.bbox, this.coordTransformMatrix)
+			transformBbox(this.#bbox, this.coordTransformMatrix)
 		)
 	}
 	
 	resetFlip() {
-		this.#x0 = this.bbox.x;
-		this.#y0 = this.bbox.y;
-		this.#x1 = this.#x0 + this.bbox.width;
-		this.#y1 = this.#y0 + this.bbox.height;
+		this.#x0 = this.#bbox.x;
+		this.#y0 = this.#bbox.y;
+		this.#x1 = this.#x0 + this.#bbox.width;
+		this.#y1 = this.#y0 + this.#bbox.height;
 	}
 
 	set(prop, val) {
@@ -131,7 +135,20 @@ class Rectangle {
 		if (val != this[prop]) {
 			this.changed = true;
 		}
-		this[prop] = val;
+		switch (prop) {
+			case "x0":
+				this.#x0 = val;
+				break;
+			case "x1":
+				this.#x1 = val;
+				break;
+			case "y0": 
+				this.#y0 = val;
+				break;
+			case "y1":
+				this.#y1 = val;
+				break;
+		}
 		this.#updateBbox();
 		this.draw();
 	}
@@ -145,6 +162,10 @@ class Rectangle {
 	get x1() { return this.#x1 }
 	get y0() { return this.#y0 }
 	get y1() { return this.#y1 }
+	
+	get bbox() {
+		return {...this.#bbox};
+	}
 	
 	setPoint0AndShift(x, y) {
 		let dx = x - this.#x0;
@@ -164,13 +185,13 @@ class Rectangle {
 		let [yLow, yHigh] = this.#y0 < this.#y1 ? ["y0", "y1"] : ["y1", "y0"];
 		
 		if (this.xBounds) {
-			this[xLow] = setToBounds(this[xLow], [this.xBounds[0], this.xBounds[1] - this.bbox.width]);
-			this[xHigh] = this[xLow] + this.bbox.width;
+			this["#" + xLow] = setToBounds(this[xLow], [this.xBounds[0], this.xBounds[1] - this.#bbox.width]);
+			this["#" + xHigh] = this[xLow] + this.#bbox.width;
 			
 		}
 		if (this.yBounds) {
-			this[yLow] = setToBounds(this[yLow], [this.yBounds[0], this.yBounds[1] - this.bbox.height]);
-			this[yHigh] = this[yLow] + this.bbox.height;
+			this["#" + yLow] = setToBounds(this[yLow], [this.yBounds[0], this.yBounds[1] - this.#bbox.height]);
+			this["#" + yHigh] = this[yLow] + this.#bbox.height;
 		}
 		this.#updateBbox();
 		this.draw();
@@ -182,13 +203,13 @@ class Rectangle {
 	}
 	
 	contains(x, y) {
-		return this.bbox.x <= x && x < this.bbox.x + this.bbox.width && this.bbox.y <= y && y < this.bbox.y + this.bbox.height;
+		return this.#bbox.x <= x && x < this.#bbox.x + this.#bbox.width && this.#bbox.y <= y && y < this.#bbox.y + this.#bbox.height;
 	}
 	
 	asBounds() {
 		return {
-			xBounds: [this.bbox.x, this.bbox.x + this.bbox.width],
-			yBounds: [this.bbox.y, this.bbox.y + this.bbox.height]
+			xBounds: [this.#bbox.x, this.#bbox.x + this.#bbox.width],
+			yBounds: [this.#bbox.y, this.#bbox.y + this.#bbox.height]
 		}
 	}
 	
@@ -312,12 +333,12 @@ class Rectangle {
 				
 				if (props.edge[0] == "y") {
 					var pos = {
-						x: this.bbox.x + this.bbox.width / 2,
+						x: this.#bbox.x + this.#bbox.width / 2,
 						y: this[props.edge]
 					}
 				} else {
 					var pos = {
-						y: this.bbox.y + this.bbox.height / 2,
+						y: this.#bbox.y + this.#bbox.height / 2,
 						x: this[props.edge]
 					}
 				}
