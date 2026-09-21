@@ -209,7 +209,7 @@ class Rectangle {
 	}
 	
 	contains(x, y) {
-		return this.#bbox.x <= x && x < this.#bbox.x + this.#bbox.width && this.#bbox.y <= y && y < this.#bbox.y + this.#bbox.height;
+		return this.#bbox.x <= x && x <= this.#bbox.x + this.#bbox.width && this.#bbox.y <= y && y <= this.#bbox.y + this.#bbox.height;
 	}
 	
 	asBounds() {

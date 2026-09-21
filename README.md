@@ -106,23 +106,71 @@ Translates the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obey
 ---
 
 ### draw() 
-Redraws the rectangle. Currently, the only use for this function is if `coordTransformMatrix` has been changed, as it does not change the rectangle according to changes to any other constraining instance properties (e.g. `xBounds`), and changes to the edge properties automatically redraw the rectangle.
+Edits the SVG rectangle's properties to match the `Rectangle`. Currently, the only use for this function is if `coordTransformMatrix` has been changed, as it does not change the rectangle according to changes to any other constraining instance properties (e.g. `xBounds`), and changes to the edge properties automatically edit the SVG element.
 
 ---
 
 ### remove() 
 
-### contains() 
+Removes the SVG rectangle (and its resizing handles, if it has them) from its parent.
 
-### asBounds() 
+### contains(x, y) 
+
+Returns a boolean indicating if the point (`x`, `y`) is within or on the rectangle.
+
+### asBounds()
+
+Returns an object with keys `xBounds` and `yBounds` which can be used to keep another `Rectangle` inside this one.
+```js
+const bounds = rect.asBounds()
+// is equivalent to
+const bounds = {
+	xBounds: [rect.bbox.x, rect.bbox.x + rect.bbox.width],
+	yBounds: [rect.bbox.y, rect.bbox.y + rect.bbox.height]
+```
 
 ### get element
 
-### allowDrag
+The `SVGRectElement` that the `Rectangle` created/modifies.
 
-### allowResize
+### allowDrag(callback, inside = true)
 
-### allowResizeAndDrag
+Allow a user to drag the rectangle with the [pointer](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). If `inside` is true, the css attribute `pointer-events` is set to `visibleFill`, meaning that an unfilled rectangle can still be dragged by clicking inside it.
+
+`callback` is called, with no arguments, when the rectangle is moved by the user.
+
+### allowResize(callback, useRef)
+
+Allow a user to resize the rectangle with the [pointer](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). For this, resizing handles are added to each edge and corner. The handles are SVG [`use` elements](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/use), using `useRef` as their `href` attribute. For example:
+
+```html
+<svg width="1000" height="1000">
+	<defs>
+		<circle id="handle-template" r="4" fill="blue"/>
+	</defs>
+</svg>
+```
+
+```js
+const rect = new Rectangle(
+	document.querySelector("svg"),
+	{x: 10, y: 10, width: 20, height: 20},
+	{stroke: "black", fill: "none", "stroke-width": 2}
+);
+rect.allowResize(() => {}, "handle-template");
+```
+
+`callback` is called, with no arguments, when the rectangle is resized by the user.
+
+### allowResizeAndDrag(callback, useRef, inside = true)
+
+Shorthand for `allowResize` and `allowDrag` when using the same callback.
+```js
+rect.allowResizeAndDrag(callback, useRef, inside)
+// is equivalent to
+rect.allowResize(callback, useRef)
+rect.allowDrag(callback, inside)
+```
 
 ## Instance properties
 
