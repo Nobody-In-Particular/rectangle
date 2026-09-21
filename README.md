@@ -18,9 +18,7 @@ const rect = await Rectangle.selectArea(
 rect.set("x1", area.x1 - 2);
 ```
 
-## Methods
-
-### constructor
+## Constructor
 ```js
 new Rectangle(
 	parentElement, bbox, style,
@@ -44,6 +42,8 @@ Adds a new SVG `rect` element as a child of `parentElement` (an `SVGElement`).
 The configuration options `flippable`, `xBounds`, `yBounds`, `round` and `coordTransformMatrix` set the initial values for the corresponding settable instance properties.
 
 ---
+
+## Instance methods
 
 ### set(prop, val)
 
@@ -106,7 +106,40 @@ Translates the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obey
 ---
 
 ### draw() 
-Redraws the rectangle. The only use for this function currently is if `coordTransformMatrix` has been changed, as this function does not change the rectangle according to changes to any other constraining instance properties (e.g. `xBounds`), and changes to the edge properties automatically redraw the rectangle.
+Redraws the rectangle. Currently, the only use for this function is if `coordTransformMatrix` has been changed, as it does not change the rectangle according to changes to any other constraining instance properties (e.g. `xBounds`), and changes to the edge properties automatically redraw the rectangle.
 
+---
+
+### remove() 
+
+### contains() 
+
+### asBounds() 
+
+### get element
+
+### allowDrag
+
+### allowResize
+
+### allowResizeAndDrag
+
+## Instance properties
+
+### flippable
+
+### round
+
+### xBounds
+
+### yBounds
+
+### coordTransformMatrix
+
+## Static methods
+
+### selectArea
+
+## License
 
 
