@@ -45,22 +45,36 @@ The configuration options `flippable`, `xBounds`, `yBounds`, `round` and `coordT
 
 ---
 
-### set
-```js
-rect.set(prop, val)
-```
-Sets property `prop` (one of `x0`, `y0`, `x1`, `y1`), to `val`, obeying restrictions set by the instance properties, and rounding `val` if `rect.round` is true.
+### set(prop, val)
+
+Sets edge property `prop` (one of `x0`, `y0`, `x1`, `y1`), to `val`, obeying restrictions set by the instance properties, and rounding `val` if `rect.round` is true.
 
 The usefulness of the "lower level" of the API is in the fact that the property names are *conserved*, e.g. if `x1` is set further left than `x0`, it remains `x1` rather than becoming `x0`.
 ```js
 rect.set("x0", 4);
 rect.set("x1", 2);
-// The rectangle now spans [2, 4]
+// The rectangle now spans [2, 4] on the x-axis
 
 rect.set("x1", 5);
-// The rectangle now spans [4, 5]
+// The rectangle now spans [4, 5] on the x-axis
 ```
+---
+### set x0, set x1, set y0, set y1
+Setters for the edge properties
+```js
+// These two statements are equivalent
+rect.x0 = 5
+rect.set("x0", 5)
+```
+---
+### get x0, get x1, get y0, get y1
+Getters for the edge properties.
+```js
+const currentX0 = rect.x0
+```
+---
+### setPoint0AndShift(x, y)
+Moves the rectangle such that `x0` moves to `x` and `y0` moves to `y`, obeying restrictions set by the instance properties, and rounding `x` and `y` if `rect.round` is true.
+---
 
-### set <x0, x1, y0, y1>
-Setters for the edge properties, e.g. `rect.x0 = 5` is equivalent to `rect.set("x0", 5)`.
 
