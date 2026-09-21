@@ -253,7 +253,7 @@ class Rectangle {
 	
 	#createResizer(ref) {
 		return addSVGElement(this.#parentElement, "use", {
-			"href": "#" + ref
+			"href": ref
 		})
 	}
 	

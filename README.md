@@ -129,6 +129,7 @@ const bounds = rect.asBounds()
 const bounds = {
 	xBounds: [rect.bbox.x, rect.bbox.x + rect.bbox.width],
 	yBounds: [rect.bbox.y, rect.bbox.y + rect.bbox.height]
+}
 ```
 
 ---
@@ -139,7 +140,7 @@ The `SVGRectElement` that the `Rectangle` created/modifies.
 ---
 ### allowDrag(callback, inside = true)
 
-Allow a user to drag the rectangle with the [pointer](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). If `inside` is true, the css attribute `pointer-events` is set to `visibleFill`, meaning that an unfilled rectangle can still be dragged by clicking inside it.
+Allow a user to drag the rectangle with the [pointer](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). If `inside` is true, the CSS attribute `pointer-events` is set to `visibleFill`, meaning that an unfilled rectangle can still be dragged by clicking inside it.
 
 `callback` is called, with no arguments, when the rectangle is moved by the user.
 
@@ -162,7 +163,7 @@ const rect = new Rectangle(
 	{x: 10, y: 10, width: 20, height: 20},
 	{stroke: "black", fill: "none", "stroke-width": 2}
 );
-rect.allowResize(() => {}, "handle-template");
+rect.allowResize(() => {}, "#handle-template");
 ```
 
 `callback` is called, with no arguments, when the rectangle is resized by the user.
@@ -184,25 +185,38 @@ rect.allowDrag(callback, inside)
 ---
 ### flippable
 
+`boolean`
+Can the rectangle be "flipped", i.e. can `x1` be set or moved by the user to be less than `x0`, and `y1` than `y0`.
+N/B: usually, it is desired to call `resetFlip()`  before setting `flippable = true`.
+
 ---
 ### round
+`boolean`
+When setting edge properties with `set()` or `setPoint0AndShift`, or when a user sets them after `allowResize()` or `allowDrag()` have been called, the given value(s) will be rounded to the nearest integer if `round = true`.
 
 ---
 ### xBounds
+`Array` - `[number, number]`
+Constrains the span of the x-axis that the rectangle can be moved in. No part of the rectangle can go further left than `xBounds[0]` or further right than `xBounds[1]`.
 
 ---
 ### yBounds
+`Array` - `[number, number]`
+Constrains the span of the y-axis that the rectangle can be moved in. No part of the rectangle can go further up than `yBounds[0]` or further down than `yBounds[1]`.
 
 ---
 ### coordTransformMatrix
+
+`DOMMatrixReadOnly`
+Allows the rectangle to exist in a "virtual" coordinate space other than the SVG coordinate space of its parent element.
+
+This property is a matrix that transforms "virtual" coordinates into SVG coordinates. It is used to transform the `Rectangle`'s properties before drawing/editing the SVG rectangle, and its inverse is used when the user is dragging/resizing, to transform the SVG coordinates of the user's mouse to "virtual" coordinates for the `Rectangle`.
+
+N/B: user mouse coordinates are already transformed from screen space to SVG space before any transformation by `coordTransformMatrix`.
 
 ---
 ## Static methods
 
 ---
 ### selectArea
-
----
-## License
-
 
