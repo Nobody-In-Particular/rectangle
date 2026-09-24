@@ -187,17 +187,31 @@ class Rectangle {
 		this.#x1 += dx;
 		this.#y0 += dy;
 		this.#y1 += dy;
-		let [xLow, xHigh] = this.#x0 < this.#x1 ? ["x0", "x1"] : ["x1", "x0"];
-		let [yLow, yHigh] = this.#y0 < this.#y1 ? ["y0", "y1"] : ["y1", "y0"];
 		
 		if (this.xBounds) {
-			this["#" + xLow] = setToBounds(this[xLow], [this.xBounds[0], this.xBounds[1] - this.#bbox.width]);
-			this["#" + xHigh] = this[xLow] + this.#bbox.width;
+			const lowVal = setToBounds(Math.min(this.#x0, this.#x1), [this.xBounds[0], this.xBounds[1] - this.#bbox.width]);
+			const highVal = lowVal + this.#bbox.width;
+			
+			if (this.#x0 < this.#x1) {
+				this.#x0 = lowVal;
+				this.#x1 = highVal;
+			} else { 
+				this.#x0 = highVal;
+				this.#x1 = lowVal;
+			}
 			
 		}
 		if (this.yBounds) {
-			this["#" + yLow] = setToBounds(this[yLow], [this.yBounds[0], this.yBounds[1] - this.#bbox.height]);
-			this["#" + yHigh] = this[yLow] + this.#bbox.height;
+			const lowVal = setToBounds(Math.min(this.#y0, this.#y1), [this.yBounds[0], this.yBounds[1] - this.#bbox.height]);
+			const highVal = lowVal + this.#bbox.height;
+			
+			if (this.#y0 < this.#y1) {
+				this.#y0 = lowVal;
+				this.#y1 = highVal;
+			} else { 
+				this.#y0 = highVal;
+				this.#y1 = lowVal;
+			}
 		}
 		this.#updateBbox();
 		this.draw();
@@ -362,4 +376,4 @@ class Rectangle {
 	}
 }
 
-export { Rectangle };
+export { Rectangle as default };
