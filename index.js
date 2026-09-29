@@ -280,16 +280,17 @@ class Rectangle {
 		};
 		await this.#draggingProxy(
 			((x, y) => {
-				for (let prop of props) {
-					if (prop[0] == "x") {
-						var val = x - offsetFromCentre.x
-					} else {
-						var val = y - offsetFromCentre.y
+				if (callback()) {
+					for (let prop of props) {
+						if (prop[0] == "x") {
+							var val = x - offsetFromCentre.x
+						} else {
+							var val = y - offsetFromCentre.y
+						}
+						this.set(prop, val);
 					}
-					this.set(prop, val);
+					this.#alignResizers();
 				}
-				this.#alignResizers();
-				callback();
 			})
 		);
 	}
@@ -329,8 +330,9 @@ class Rectangle {
 			let yRel = y - this.#y0;
 			await this.#draggingProxy(
 				(x, y) => {
-					this.setPoint0AndShift(x - xRel, y - yRel);
-					callback();
+					if (callback()) {
+						this.setPoint0AndShift(x - xRel, y - yRel);
+					}
 				}
 			);
 		})
